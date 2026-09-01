@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/post_model.dart';
 import '../auth/login_screen.dart';
 
@@ -168,7 +169,14 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
           IconButton(
             tooltip: 'লগআউট',
             icon: const Icon(Icons.logout_rounded),
-            onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen())),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              if (!context.mounted) return;
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
           ),
         ],
       ),
