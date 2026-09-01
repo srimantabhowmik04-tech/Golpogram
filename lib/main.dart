@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-import 'screens/auth/login_screen.dart'; // এই ফাইলটি আমরা পরের ধাপে বানাবো
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'screens/auth/login_screen.dart';
+import 'screens/feed/feed_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint("Firebase init: $e");
+  }
   runApp(const GolpogramApp());
 }
 
@@ -15,7 +24,7 @@ class GolpogramApp extends StatelessWidget {
       title: 'Golpogram',
       theme: ThemeData(
         useMaterial3: true,
-        primaryColor: const Color(0xFF00897B), // Teal Green Color
+        primaryColor: const Color(0xFF00897B),
         scaffoldBackgroundColor: const Color(0xFFF4F6F8),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
@@ -23,7 +32,24 @@ class GolpogramApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Color(0xFF00897B)),
         ),
       ),
-      home: const LoginScreen(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator(color: Color(0xFF00897B))),
+            );
+          }
+          if (snapshot.hasData && snapshot.data != null) {
+            final user = snapshot.data!;
+            final displayName = user.displayName?.isNotEmpty == true
+                ? user.displayName!
+                : user.email?.split('@').first ?? 'User';
+            return GolpogramFeedScreen(userName: displayName);
+          }
+          return const LoginScreen();
+        },
+      ),
     );
   }
 }
