@@ -1,4 +1,4 @@
-name: Build Golpogram APK
+name: Build Golpogram Release APK
 
 on:
   push:
@@ -32,11 +32,11 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Debug APK
-        run: flutter build apk --debug
+      - name: Build Split Release APKs (Small Size)
+        run: flutter build apk --release --split-per-abi
 
-      - name: Upload Debug APK
+      - name: Upload Small Release APKs
         uses: actions/upload-artifact@v4
         with:
-          name: golpogram-debug-apk
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: golpogram-small-apks
+          path: build/app/outputs/flutter-apk/*.apk
