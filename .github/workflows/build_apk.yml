@@ -39,7 +39,7 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Split Release APKs
+      - name: Build Split Release APKs (Small Size)
         run: flutter build apk --release --split-per-abi
 
       - name: Upload Small Release APKs
