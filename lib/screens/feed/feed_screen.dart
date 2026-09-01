@@ -50,7 +50,9 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (ctx) => Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(ctx).viewInsets.bottom,
@@ -65,8 +67,18 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('নতুন গল্প লিখুন', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF00897B))),
-                IconButton(icon: const Icon(Icons.close, color: Colors.grey), onPressed: () => Navigator.pop(context))
+                const Text(
+                  'নতুন গল্প লিখুন',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF00897B),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close, color: Colors.grey),
+                  onPressed: () => Navigator.pop(context),
+                )
               ],
             ),
             const Divider(),
@@ -74,7 +86,10 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
               controller: _postController,
               maxLines: 5,
               autofocus: true,
-              decoration: const InputDecoration(hintText: 'আজকের গল্প বা ভাবনা কী?...', border: InputBorder.none),
+              decoration: const InputDecoration(
+                hintText: 'আজকের গল্প বা ভাবনা কী?...',
+                border: InputBorder.none,
+              ),
             ),
             const SizedBox(height: 12),
             ElevatedButton.icon(
@@ -82,11 +97,16 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                 backgroundColor: const Color(0xFF00897B),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               onPressed: _addNewPost,
               icon: const Icon(Icons.send_rounded),
-              label: const Text('পোস্ট করুন', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              label: const Text(
+                'পোস্ট করুন',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 18),
           ],
@@ -102,14 +122,24 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
       builder: (ctx) => StatefulBuilder(
         builder: (context, setModalState) => Container(
           height: MediaQuery.of(context).size.height * 0.65,
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 16, left: 16, right: 16),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            top: 16,
+            left: 16,
+            right: 16,
+          ),
           child: Column(
             children: [
-              const Text('মন্তব্যসমূহ', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              const Text(
+                'মন্তব্যসমূহ',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
               const Divider(),
               Expanded(
                 child: post.comments.isEmpty
@@ -119,7 +149,10 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                         itemBuilder: (context, index) => Container(
                           margin: const EdgeInsets.symmetric(vertical: 4),
                           padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(color: const Color(0xFFF4F6F8), borderRadius: BorderRadius.circular(12)),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF4F6F8),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           child: Text(post.comments[index], style: const TextStyle(fontSize: 14)),
                         ),
                       ),
@@ -129,7 +162,10 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                   Expanded(
                     child: TextField(
                       controller: commentController,
-                      decoration: const InputDecoration(hintText: 'একটি সুন্দর মন্তব্য লিখুন...', border: InputBorder.none),
+                      decoration: const InputDecoration(
+                        hintText: 'একটি সুন্দর মন্তব্য লিখুন...',
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                   IconButton(
@@ -158,11 +194,49 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.menu_book_rounded, color: Color(0xFF00897B), size: 28),
-            SizedBox(width: 8),
-            Text('Golpogram', style: TextStyle(color: Color(0xFF00897B), fontWeight: FontWeight.w900, fontSize: 22)),
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: const Color(0xFF00897B),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'G',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      height: 1.0,
+                    ),
+                  ),
+                  Text(
+                    'GOLPO',
+                    style: TextStyle(
+                      fontSize: 5.5,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Golpogram',
+              style: TextStyle(
+                color: Color(0xFF00897B),
+                fontWeight: FontWeight.w900,
+                fontSize: 22,
+                letterSpacing: 0.5,
+              ),
+            ),
           ],
         ),
         actions: [
@@ -202,8 +276,14 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                     borderRadius: BorderRadius.circular(24),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                      decoration: BoxDecoration(color: const Color(0xFFF4F6F8), borderRadius: BorderRadius.circular(24)),
-                      child: Text("${widget.userName}, নতুন কোনো গল্প আছে?", style: const TextStyle(color: Colors.grey, fontSize: 14)),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF4F6F8),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Text(
+                        "${widget.userName}, নতুন কোনো গল্প আছে?",
+                        style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
                     ),
                   ),
                 ),
@@ -243,12 +323,17 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                               setState(() => _posts.removeWhere((item) => item.id == post.id));
                             }
                           },
-                          itemBuilder: (ctx) => [const PopupMenuItem(value: 'delete', child: Text('Delete Story'))],
+                          itemBuilder: (ctx) => [
+                            const PopupMenuItem(value: 'delete', child: Text('Delete Story')),
+                          ],
                         )
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Text(post.text, style: const TextStyle(fontSize: 15, height: 1.45, color: Colors.black87)),
+                  Text(
+                    post.text,
+                    style: const TextStyle(fontSize: 15, height: 1.45, color: Colors.black87),
+                  ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -272,9 +357,19 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                           child: Row(
                             children: [
-                              Icon(post.isLiked ? Icons.favorite : Icons.favorite_border, size: 20, color: post.isLiked ? Colors.red : Colors.grey[700]),
+                              Icon(
+                                post.isLiked ? Icons.favorite : Icons.favorite_border,
+                                size: 20,
+                                color: post.isLiked ? Colors.red : Colors.grey[700],
+                              ),
                               const SizedBox(width: 6),
-                              Text('Like', style: TextStyle(color: post.isLiked ? Colors.red : Colors.grey[700], fontWeight: FontWeight.bold)),
+                              Text(
+                                'Like',
+                                style: TextStyle(
+                                  color: post.isLiked ? Colors.red : Colors.grey[700],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -287,7 +382,13 @@ class _GolpogramFeedScreenState extends State<GolpogramFeedScreen> {
                             children: [
                               Icon(Icons.mode_comment_outlined, size: 19, color: Colors.grey[700]),
                               const SizedBox(width: 6),
-                              Text('Comment', style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold)),
+                              Text(
+                                'Comment',
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ],
                           ),
                         ),
