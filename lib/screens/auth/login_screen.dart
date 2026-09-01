@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../feed/feed_screen.dart';
 import 'signup_screen.dart';
 
@@ -10,31 +11,62 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  void _handleLogin() {
-    final username = _usernameController.text.trim();
+  void _handleLogin() async {
+    final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (username.isEmpty || password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('ব্যবহারকারীর নাম এবং পাসওয়ার্ড দিন')),
+        const SnackBar(content: Text('অনুগ্রহ করে জিমেইল এবং পাসওয়ার্ড দিন')),
       );
       return;
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GolpogramFeedScreen(userName: username),
-      ),
-    );
+    setState(() => _isLoading = true);
+
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final user = credential.user;
+      final displayName = user?.displayName?.isNotEmpty == true
+          ? user!.displayName!
+          : email.split('@').first;
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GolpogramFeedScreen(userName: displayName),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = 'লগইন ব্যর্থ হয়েছে';
+      if (e.code == 'user-not-found') {
+        message = 'এই জিমেইলে কোনো একাউন্ট পাওয়া যায়নি';
+      } else if (e.code == 'wrong-password') {
+        message = 'ভুল পাসওয়ার্ড দিয়েছেন';
+      } else if (e.code == 'invalid-email') {
+        message = 'সঠিক জিমেইল অ্যাড্রেস লিখুন';
+      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -87,10 +119,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 18),
                         TextField(
-                          controller: _usernameController,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            labelText: 'ইউজারনেম বা ইমেল',
-                            prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF00897B)),
+                            labelText: 'Gmail / ইমেল অ্যাড্রেস',
+                            prefixIcon: const Icon(Icons.email_outlined, color: Color(0xFF00897B)),
                             filled: true,
                             fillColor: const Color(0xFFF4F6F8),
                             border: OutlineInputBorder(
@@ -115,16 +148,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF00897B),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          ),
-                          onPressed: _handleLogin,
-                          child: const Text('প্রবেশ করুন', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
+                        _isLoading
+                            ? const Center(child: CircularProgressIndicator(color: Color(0xFF00897B)))
+                            : ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF00897B),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                ),
+                                onPressed: _handleLogin,
+                                child: const Text(
+                                  'প্রবেশ করুন',
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              ),
                         const SizedBox(height: 12),
                         TextButton(
                           onPressed: () {
